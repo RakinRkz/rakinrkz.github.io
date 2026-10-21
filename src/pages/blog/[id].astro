@@ -1,0 +1,31 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ProseLayout from '../../layouts/ProseLayout.astro';
+import { formatDate } from '../../lib/format';
+import { publishedPosts, readingTime } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  return publishedPosts(await getCollection('blog'), { includeDrafts: import.meta.env.DEV }).map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'blog'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, pubDate } = entry.data;
+const { Content } = await render(entry);
+---
+
+<ProseLayout
+  title={title}
+  description={description}
+  meta={`${formatDate(pubDate)} · ${readingTime(entry.body ?? '')} min read`}
+  backHref="/blog/"
+  backLabel="All posts"
+>
+  <Content />
+</ProseLayout>
