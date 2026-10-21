@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, stack, repo, private: isPrivate, caseStudy } = project.data;
+---
+
+<article class="card">
+  <h3 class="card-title">
+    {caseStudy ? <a href={`/projects/${project.id}/`}>{title} <span aria-hidden="true">→</span></a> : title}
+  </h3>
+  <p class="summary">{summary}</p>
+  <ul class="tags" aria-label="Tech stack">
+    {stack.map((item) => <li class="tag">{item}</li>)}
+  </ul>
+  {
+    repo ? (
+      <a class="repo" href={repo}>
+        GitHub <span aria-hidden="true">↗</span>
+      </a>
+    ) : (
+      isPrivate && <span class="repo muted">private repository</span>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  .card-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  .card-title a {
+    color: var(--fg);
+  }
+  .card-title a span {
+    color: var(--accent);
+  }
+  .summary {
+    margin: 0;
+    font-size: 0.93rem;
+  }
+  .repo {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: auto;
+  }
+</style>

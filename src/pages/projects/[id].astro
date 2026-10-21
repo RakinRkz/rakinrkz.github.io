@@ -1,0 +1,42 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ProseLayout from '../../layouts/ProseLayout.astro';
+import { requireCaseStudyBodies } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  return requireCaseStudyBodies(await getCollection('projects')).map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'projects'>;
+}
+
+const { entry } = Astro.props;
+const { title, summary, stack, repo, private: isPrivate } = entry.data;
+const { Content } = await render(entry);
+---
+
+<ProseLayout
+  title={title}
+  description={summary}
+  meta={stack.join(' · ')}
+  backHref="/projects/"
+  backLabel="All projects"
+>
+  <Content />
+  <p class="source">
+    {repo ? <a href={repo}>Source on GitHub ↗</a> : isPrivate && <span class="muted">Private repository</span>}
+  </p>
+</ProseLayout>
+
+<style>
+  .source {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.92rem;
+  }
+</style>
