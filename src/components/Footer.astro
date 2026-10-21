@@ -1,0 +1,48 @@
+---
+const links = [
+  { href: 'https://github.com/RakinRkz', label: 'GitHub' },
+  { href: 'https://www.linkedin.com/in/akm-rakinuzzaman/', label: 'LinkedIn' },
+  { href: 'mailto:rakinuzzaman@gmail.com', label: 'Email' },
+];
+---
+
+<footer class="site-footer">
+  <div class="container bar">
+    <ul>
+      {
+        links.map(({ href, label }) => (
+          <li>
+            <a href={href}>{label}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="muted">© 2026 A. K. M. Rakinuzzaman</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 4rem;
+    border-top: 1px solid var(--rule);
+  }
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-block: 20px 28px;
+    font-size: 0.88rem;
+  }
+  ul {
+    display: flex;
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  p {
+    margin: 0;
+  }
+</style>
