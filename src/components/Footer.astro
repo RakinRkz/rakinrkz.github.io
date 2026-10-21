@@ -1,8 +1,10 @@
 ---
+import { profile } from '../data/profile';
+
 const links = [
-  { href: 'https://github.com/RakinRkz', label: 'GitHub' },
-  { href: 'https://www.linkedin.com/in/akm-rakinuzzaman/', label: 'LinkedIn' },
-  { href: 'mailto:rakinuzzaman@gmail.com', label: 'Email' },
+  { href: profile.github, label: 'GitHub' },
+  { href: profile.linkedin, label: 'LinkedIn' },
+  { href: `mailto:${profile.email}`, label: 'Email' },
 ];
 ---
 
@@ -17,7 +19,7 @@ const links = [
         ))
       }
     </ul>
-    <p class="muted">© 2026 A. K. M. Rakinuzzaman</p>
+    <p class="muted">© 2026 {profile.name}</p>
   </div>
 </footer>
 

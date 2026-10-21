@@ -1,0 +1,80 @@
+---
+import type { Role } from '../data/types';
+
+interface Props {
+  role: Role;
+}
+
+const { role } = Astro.props;
+---
+
+<article class="role">
+  <h3>{role.org}{role.location && <span class="location muted">, {role.location}</span>}</h3>
+  <ul class="positions">
+    {
+      role.positions.map((position) => (
+        <li>
+          <span>{position.title}</span>
+          <span class="mono muted">{position.dates}</span>
+        </li>
+      ))
+    }
+  </ul>
+  {role.context && <p class="context muted">{role.context}</p>}
+  <ul class="highlights">
+    {role.highlights.map((highlight) => <li>{highlight}</li>)}
+  </ul>
+</article>
+
+<style>
+  .role + .role {
+    margin-top: 2rem;
+  }
+  h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  .location {
+    font-weight: 400;
+  }
+  .positions {
+    margin: 0 0 0.5rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.93rem;
+  }
+  .positions li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 1rem;
+  }
+  .context {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+  }
+  .highlights {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.95rem;
+  }
+  .highlights li {
+    position: relative;
+    padding-left: 1rem;
+  }
+  .highlights li + li {
+    margin-top: 0.35rem;
+  }
+  .highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.65em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+</style>

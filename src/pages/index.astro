@@ -1,10 +1,155 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import RoleEntry from '../components/RoleEntry.astro';
+import SkillGrid from '../components/SkillGrid.astro';
+import { awards } from '../data/awards';
+import { education, roles } from '../data/experience';
+import { profile } from '../data/profile';
+import { skillGroups } from '../data/skills';
+import { publishedPosts } from '../lib/posts';
+
+const featured = (await getCollection('projects'))
+  .filter((project) => project.data.caseStudy)
+  .sort((a, b) => a.data.order - b.data.order);
+const latestPosts = publishedPosts(await getCollection('blog'), { includeDrafts: import.meta.env.DEV }).slice(0, 3);
 ---
 
-<BaseLayout
-  title="A. K. M. Rakinuzzaman — Software Engineer"
-  description="Portfolio of A. K. M. Rakinuzzaman, software engineer."
->
-  <h1>A. K. M. Rakinuzzaman</h1>
+<BaseLayout title={`${profile.name} — Software Engineer`} description={profile.headline}>
+  <section class="hero">
+    <h1>{profile.name}</h1>
+    <p class="headline">{profile.headline}</p>
+    <p class="where mono muted">{`${profile.location} · ${profile.availability}`}</p>
+    <ul class="links">
+      <li><a href={profile.github}>GitHub</a></li>
+      <li><a href={profile.linkedin}>LinkedIn</a></li>
+      <li><a href={`mailto:${profile.email}`}>Email</a></li>
+      <li><a class="cv" href="/cv.pdf">Download CV</a></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="about">
+    <h2 class="label" id="about">About</h2>
+    <p>{profile.about}</p>
+  </section>
+
+  <section aria-labelledby="experience">
+    <h2 class="label" id="experience">Experience</h2>
+    {roles.map((role) => <RoleEntry role={role} />)}
+  </section>
+
+  <section aria-labelledby="education">
+    <h2 class="label" id="education">Education</h2>
+    <p class="education">
+      <strong>{education.degree}</strong>, {education.school}
+      <span class="mono muted">{`${education.location} · ${education.dates}`}</span>
+    </p>
+  </section>
+
+  {
+    featured.length > 0 && (
+      <section aria-labelledby="featured">
+        <h2 class="label" id="featured">Featured projects</h2>
+        <div class="featured">
+          {featured.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+        <p class="more">
+          <a href="/projects/">All projects →</a>
+        </p>
+      </section>
+    )
+  }
+
+  <section aria-labelledby="skills">
+    <h2 class="label" id="skills">Skills</h2>
+    <SkillGrid groups={skillGroups} />
+  </section>
+
+  <section aria-labelledby="awards">
+    <h2 class="label" id="awards">Certifications &amp; awards</h2>
+    <ul class="awards">
+      {
+        awards.map((award) => (
+          <li>
+            <strong>{award.title}</strong>
+            {` — ${award.detail}`}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    latestPosts.length > 0 && (
+      <section aria-labelledby="posts">
+        <h2 class="label" id="posts">Latest posts</h2>
+        <PostList posts={latestPosts} />
+      </section>
+    )
+  }
 </BaseLayout>
+
+<style>
+  section + section {
+    margin-top: 3rem;
+  }
+  .hero {
+    margin-bottom: 3.5rem;
+  }
+  .headline {
+    font-size: 1.15rem;
+    margin: 0 0 0.6rem;
+  }
+  .where {
+    margin: 0 0 1.1rem;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-weight: 500;
+  }
+  .cv {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+  }
+  .cv:hover {
+    background: var(--accent);
+    color: var(--bg);
+    text-decoration: none;
+  }
+  .education {
+    margin: 0;
+  }
+  .education .mono {
+    display: block;
+    margin-top: 0.15rem;
+  }
+  .featured {
+    display: grid;
+    gap: 1rem;
+  }
+  .more {
+    margin: 1rem 0 0;
+    font-size: 0.92rem;
+  }
+  .awards {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.95rem;
+  }
+  .awards li + li {
+    margin-top: 0.35rem;
+  }
+</style>
