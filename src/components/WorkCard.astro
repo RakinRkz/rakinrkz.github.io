@@ -1,0 +1,91 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { Showcase } from '../data/showcase';
+import ShowcaseDiagram from './ShowcaseDiagram.astro';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  show: Showcase;
+}
+
+const { project, show } = Astro.props;
+const href = `/projects/${project.id}/`;
+---
+
+<article class="work">
+  <a class="thumb" href={href} tabindex="-1" aria-hidden="true">
+    {
+      show.image ? (
+        <Image src={show.image.src} alt="" widths={[800, 1200]} sizes="(min-width: 720px) 560px, 170vw" />
+      ) : (
+        <ShowcaseDiagram kind={show.diagram.kind} compact />
+      )
+    }
+  </a>
+  <div class="body">
+    <h3 class="card-title"><a href={href}>{project.data.title}</a></h3>
+    <p>{show.tagline}</p>
+    <ul class="tags" aria-label="Tech stack">
+      {project.data.stack.slice(0, 3).map((item) => <li class="tag">{item}</li>)}
+    </ul>
+    <a class="more" href={href}>
+      Read the case study <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</article>
+
+<style>
+  .work {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 1px solid var(--rule);
+    background: var(--chip);
+  }
+  /* Zoom into the top-left of a screenshot (sidebar and first messages) so the thumbnail
+     shows real UI rather than a whole screen shrunk to a dark rectangle. */
+  .thumb :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+    transform: scale(1.7);
+    transform-origin: 0 0;
+  }
+  .body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem 1rem;
+  }
+  .card-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  .card-title a {
+    color: var(--fg);
+  }
+  p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .more {
+    margin-top: auto;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+</style>

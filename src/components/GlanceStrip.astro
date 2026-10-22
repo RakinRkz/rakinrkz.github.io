@@ -1,0 +1,74 @@
+---
+interface Props {
+  glance: { role: string; since: string; runsOn: string };
+  repo?: string;
+  isPrivate?: boolean;
+}
+
+const { glance, repo, isPrivate = false } = Astro.props;
+---
+
+<dl class="glance">
+  <div><dt>Role</dt><dd>{glance.role}</dd></div>
+  <div><dt>Since</dt><dd>{glance.since}</dd></div>
+  <div><dt>Runs on</dt><dd>{glance.runsOn}</dd></div>
+  <div>
+    <dt>Source</dt>
+    <dd>
+      {
+        repo ? (
+          <a href={repo}>
+            GitHub <span aria-hidden="true">↗</span>
+          </a>
+        ) : (
+          isPrivate && 'Private repository'
+        )
+      }
+    </dd>
+  </div>
+</dl>
+
+<style>
+  .glance {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 0 1.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  @media (min-width: 600px) {
+    .glance {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .glance div {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .glance div:nth-child(odd) {
+    border-right: 1px solid var(--rule);
+  }
+  .glance div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  @media (min-width: 600px) {
+    .glance div {
+      border-bottom: 0;
+      border-right: 1px solid var(--rule);
+    }
+    .glance div:last-child {
+      border-right: 0;
+    }
+  }
+  dt {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  dd {
+    margin: 0.15rem 0 0;
+    font-size: 0.86rem;
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+// The minimal-auto-deployment loop, drawn as a cycle. `compact` is the card thumbnail.
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<figure
+  class:list={['loop', { compact }]}
+  role="img"
+  aria-label="The deploy loop: on each tick, git fetch and compare the local and remote hashes; if they differ, git pull --ff-only, then run the deploy script, then wait for the next tick."
+>
+  <span class="box">tick{!compact && <small>every 60 s</small>}</span>
+  <span class="arrow" aria-hidden="true">→</span>
+  <span class="box">git fetch{!compact && <small>compare with remote</small>}</span>
+  <span class="arrow" aria-hidden="true">↑</span>
+  <span></span>
+  <span class="arrow" aria-hidden="true">↓</span>
+  <span class="box">deploy script{!compact && <small>bash, in the repo</small>}</span>
+  <span class="arrow" aria-hidden="true">←</span>
+  <span class="box hl">git pull --ff-only{!compact && <small>if the hashes differ</small>}</span>
+</figure>
+
+<style>
+  .loop {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 0.6rem;
+    margin: 0.75rem 0 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+  .box {
+    padding: 0.4rem 0.65rem;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--chip);
+    color: var(--fg);
+    text-align: center;
+    line-height: 1.35;
+  }
+  .box.hl {
+    border-color: var(--accent);
+  }
+  small {
+    display: block;
+    font-size: 0.66rem;
+    color: var(--muted);
+  }
+  .arrow {
+    color: var(--accent);
+    text-align: center;
+  }
+  .compact {
+    margin: 0;
+    font-size: 0.7rem;
+  }
+  .compact .box {
+    padding: 0.25rem 0.5rem;
+    background: var(--bg);
+    border-color: var(--accent);
+  }
+</style>

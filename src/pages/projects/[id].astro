@@ -1,10 +1,16 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import ProseLayout from '../../layouts/ProseLayout.astro';
-import { requireCaseStudyBodies } from '../../lib/projects';
+import GlanceStrip from '../../components/GlanceStrip.astro';
+import ShowcaseDiagram from '../../components/ShowcaseDiagram.astro';
+import { showcase } from '../../data/showcase';
+import { assertKnownProjectIds, requireCaseStudyBodies } from '../../lib/projects';
 
 export async function getStaticPaths() {
-  return requireCaseStudyBodies(await getCollection('projects')).map((entry) => ({
+  const projects = await getCollection('projects');
+  assertKnownProjectIds(Object.keys(showcase), projects.map((project) => project.id));
+  return requireCaseStudyBodies(projects).map((entry) => ({
     params: { id: entry.id },
     props: { entry },
   }));
@@ -15,7 +21,8 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, summary, stack, repo, private: isPrivate } = entry.data;
+const { title, summary, stack, repo, private: isPrivate, glance } = entry.data;
+const show = showcase[entry.id];
 const { Content } = await render(entry);
 ---
 
@@ -26,6 +33,29 @@ const { Content } = await render(entry);
   backHref="/projects/"
   backLabel="All projects"
 >
+  {glance && <GlanceStrip glance={glance} repo={repo} isPrivate={isPrivate} />}
+  {
+    show?.image && (
+      <figure class="shot">
+        <Image
+          src={show.image.src}
+          alt={show.image.alt}
+          widths={[680, 1360]}
+          sizes="(min-width: 720px) 680px, 100vw"
+        />
+        <figcaption>{show.image.caption}</figcaption>
+      </figure>
+    )
+  }
+  {
+    show && (
+      <>
+        <h2>{show.diagram.title}</h2>
+        <ShowcaseDiagram kind={show.diagram.kind} />
+        <p class="caption">{show.diagram.caption}</p>
+      </>
+    )
+  }
   <Content />
   <p class="source">
     {
@@ -41,6 +71,22 @@ const { Content } = await render(entry);
 </ProseLayout>
 
 <style>
+  .shot {
+    margin: 0 0 1.75rem;
+  }
+  .shot :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+  }
+  figcaption,
+  .caption {
+    margin: 0.45rem 0 1.5rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
   .source {
     margin-top: 2.5rem;
     padding-top: 1rem;

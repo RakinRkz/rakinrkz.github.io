@@ -1,0 +1,14 @@
+---
+import type { DiagramKind } from '../data/showcase';
+import DeployLoopDiagram from './DeployLoopDiagram.astro';
+import RagPipelineDiagram from './RagPipelineDiagram.astro';
+
+interface Props {
+  kind: DiagramKind;
+  compact?: boolean;
+}
+
+const { kind, compact = false } = Astro.props;
+---
+
+{kind === 'rag-pipeline' ? <RagPipelineDiagram /> : <DeployLoopDiagram compact={compact} />}

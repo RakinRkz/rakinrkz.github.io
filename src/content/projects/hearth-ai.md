@@ -5,6 +5,10 @@ stack: ["Python", "React", "llama.cpp", "RAG"]
 repo: https://github.com/RakinRkz/Hearth-AI
 caseStudy: true
 order: 2
+glance:
+  role: "Solo, end to end"
+  since: "Dec 2025"
+  runsOn: "Windows installer; Linux and macOS from source"
 ---
 
 ## Problem

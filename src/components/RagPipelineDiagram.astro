@@ -1,0 +1,87 @@
+---
+// The Hearth AI document-question path. Values are the defaults on the public main branch.
+// Detail lines are kept short so each fits one line of a fifth-width box.
+const steps = [
+  { name: 'Your files', detail: ['PDF · DOCX', 'TXT · MD'] },
+  { name: 'Chunks', detail: ['500 chars', '50 overlap'] },
+  { name: 'Embeddings', detail: ['MiniLM-L6-v2', 'fastembed'] },
+  { name: 'ChromaDB', detail: ['cosine', 'top 4'] },
+  { name: 'Local model', detail: ['llama.cpp', 'GGUF'] },
+];
+---
+
+<ol class="pipeline" aria-label="Document question pipeline">
+  {
+    steps.map((step, i) => (
+      <li class={i === steps.length - 1 ? 'last' : undefined}>
+        <span class="name">{step.name}</span>
+        {step.detail.map((line) => (
+          <span class="detail">{line}</span>
+        ))}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  /* Phones: a vertical list with ↓ between steps. Wider: one row of five with → between. */
+  .pipeline {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+    margin: 0.75rem 0 0.4rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.84rem;
+  }
+  @media (min-width: 700px) {
+    .pipeline {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.4rem;
+    }
+  }
+  li {
+    position: relative;
+    margin: 0;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--chip);
+    line-height: 1.35;
+  }
+  li + li {
+    margin-top: 0;
+  }
+  li:not(.last)::after {
+    content: '↓' / '';
+    position: absolute;
+    left: 50%;
+    bottom: -1.3rem;
+    transform: translateX(-50%);
+    color: var(--accent);
+  }
+  @media (min-width: 700px) {
+    li:not(.last)::after {
+      content: '→' / '';
+      left: auto;
+      right: -1.15rem;
+      bottom: auto;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+  li.last {
+    border-color: var(--accent);
+  }
+  .name {
+    display: block;
+    font-weight: 600;
+  }
+  .detail {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+</style>

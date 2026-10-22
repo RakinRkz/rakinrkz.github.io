@@ -5,6 +5,10 @@ stack: ["Go", "Linux", "systemd", "Git"]
 repo: https://github.com/RakinRkz/minimal-auto-deployment
 caseStudy: true
 order: 3
+glance:
+  role: "Solo"
+  since: "Apr 2026"
+  runsOn: "Linux with systemd"
 ---
 
 ## Problem

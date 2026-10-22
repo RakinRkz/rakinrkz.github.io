@@ -2,10 +2,12 @@
 import ThemeToggle from './ThemeToggle.astro';
 import { profile } from '../data/profile';
 
+// "CV" hides on narrow phones so the row fits; the hero and About page both link the PDF.
 const links = [
   { href: '/projects/', label: 'Projects' },
   { href: '/blog/', label: 'Blog' },
-  { href: '/cv.pdf', label: 'CV' },
+  { href: '/about/', label: 'About' },
+  { href: '/cv.pdf', label: 'CV', wideOnly: true },
 ];
 const path = Astro.url.pathname;
 ---
@@ -16,8 +18,8 @@ const path = Astro.url.pathname;
     <nav aria-label="Main">
       <ul>
         {
-          links.map(({ href, label }) => (
-            <li>
+          links.map(({ href, label, wideOnly }) => (
+            <li class={wideOnly ? 'wide-only' : undefined}>
               <a href={href} aria-current={path.startsWith(href) ? 'page' : undefined}>
                 {label}
               </a>
@@ -72,5 +74,10 @@ const path = Astro.url.pathname;
   }
   nav a[aria-current='page'] {
     font-weight: 600;
+  }
+  @media (max-width: 419px) {
+    .wide-only {
+      display: none;
+    }
   }
 </style>

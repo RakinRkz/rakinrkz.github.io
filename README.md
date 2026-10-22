@@ -23,21 +23,29 @@ npm run preview   # serve dist/ locally
 | What | Where |
 |---|---|
 | Name, headline, links, about | `src/data/profile.ts` |
-| Experience and education | `src/data/experience.ts` |
-| Skills, certifications and awards | `src/data/skills.ts`, `src/data/awards.ts` |
+| Home hero, proof tiles, "What I'm good at" | `src/data/home.ts` |
+| Experience and education (the About page) | `src/data/experience.ts` |
+| Skills, certifications and awards (the About page) | `src/data/skills.ts`, `src/data/awards.ts` |
 | Projects (one Markdown file each) | `src/content/projects/*.md` |
+| Featured-project taglines, screenshots and diagrams | `src/data/showcase.ts`, `src/assets/projects/` |
 | Blog posts | `src/content/blog/*.md` |
 | Downloadable CV | `public/cv.pdf` |
 
 A project's Markdown body is its case study. Set `caseStudy: true` to publish it at
-`/projects/<file-name>/` and feature it on the home page. A post with `draft: true` shows under
+`/projects/<file-name>/` and feature it on the home page; an optional `glance` block (`role`,
+`since`, `runsOn`) adds the "at a glance" strip. Give it an entry in `src/data/showcase.ts`, keyed by
+the file name, for a visual card, a screenshot and a diagram. A post with `draft: true` shows under
 `npm run dev` but is never built.
+
+Proof tiles and strengths must only use numbers already on the CV, and must not name the Cefalo
+client: the debugging post is anonymised.
 
 ### Rules the build enforces
 
 - A project marked `private: true` cannot have a `repo` link.
 - A project marked `caseStudy: true` must have a body.
 - Frontmatter must match the schemas in `src/content/schemas.ts`.
+- Every key in `src/data/showcase.ts` must match a project file name.
 
 ### Writing rule for posts and case studies
 

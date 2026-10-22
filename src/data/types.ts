@@ -40,3 +40,21 @@ export interface Award {
   title: string;
   detail: string;
 }
+
+/** A link inside the site, shown as "linkText →". */
+export interface EvidenceLink {
+  href: string;
+  linkText: string;
+}
+
+/** A home-page proof tile. `value` may contain "→", which is rendered muted. */
+export interface ProofStat extends EvidenceLink {
+  value: string;
+  label: string;
+}
+
+/** A "What I'm good at" item, each pointing at its proof. */
+export interface Strength extends EvidenceLink {
+  title: string;
+  text: string;
+}
