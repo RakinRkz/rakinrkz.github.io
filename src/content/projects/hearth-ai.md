@@ -15,12 +15,14 @@ comfortable with a terminal, Python environments and model formats. For a regula
 wall.
 
 Hearth AI is my attempt at the opposite: a private, offline assistant you install like any other
-piece of software and start using. No cloud, no API keys, and your data stays on your machine.
+piece of software and start using. No cloud account and no API keys. Your documents and conversations
+stay on your machine, and the only thing that ever goes out is a short web-search query.
 
 ## Constraints
 
 - **Everything local.** The model, the embeddings and the vector store all run on the user's machine.
-  Web search is optional and only used when the question needs it.
+  Web search is the one exception. It is on by default and can be switched off in settings. Even when
+  it is on, the model decides per message whether a search is needed, and only a few keywords are sent.
 - **Ordinary hardware.** The default path has to work on a laptop CPU, so the starter models are
   small quantised GGUF files, from about 0.8 GB to 2.4 GB. The default is Phi-3.5 Mini (3.8B, Q4_K_M).
 - **Install like normal software.** On Windows that means an installer that does not need admin
@@ -59,8 +61,8 @@ strict size and time limits, and the cleaned text goes into the prompt for a cit
   second CUDA stack that conflicts with llama.cpp's. The cost is a smaller choice of embedding models.
 - **Character-based chunking.** It is simple and predictable. The cost is that chunks do not line up
   with the model's tokens or with the document's structure.
-- **A small default context window (2,048 tokens).** It keeps memory use sane on a CPU laptop. The
-  cost is that only recent turns and a few retrieved chunks fit in the prompt.
+- **A small default context window (2,048 tokens).** It is sized so a model fits on a GPU with 4 GB
+  of VRAM. The cost is that only recent turns and a few retrieved chunks fit in the prompt.
 
 ## What I'd change
 
@@ -78,8 +80,9 @@ Using it day to day, these are the gaps I would close next:
 5. **Use the conversation summaries.** When a chat passes 70% of the context window, a summary is
    written to disk, but nothing feeds it back into the prompt. Only the last few messages reach the
    model.
-6. **Tests and CI.** The public repository has a single test file. A real suite (API, retrieval and
-   an end-to-end browser pass) with CI is the foundation for everything above.
+6. **Tests in CI.** The public repository has a single test file, and its only workflow builds the
+   Windows release. A real suite (API, retrieval and an end-to-end browser pass) running on every push
+   is the foundation for everything above.
 7. **Packaging beyond Windows.** Linux and macOS run from source today, the installer is CPU-only and
    unsigned, and GPU auto-detection only looks for NVIDIA.
 

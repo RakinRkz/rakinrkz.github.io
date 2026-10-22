@@ -1,6 +1,6 @@
 ---
 title: "minimal-auto-deployment"
-summary: "Dependency-free (standard library only) deployment daemon: polls a git remote on a ticker, fast-forward pulls on divergence, runs a deploy script, and installs/uninstalls itself as a systemd service with journald logging."
+summary: "Dependency-free (standard library only) deployment daemon: polls a git remote on a ticker, fast-forward pulls when the remote moves ahead, runs a deploy script, and installs/uninstalls itself as a systemd service with journald logging."
 stack: ["Go", "Linux", "systemd", "Git"]
 repo: https://github.com/RakinRkz/minimal-auto-deployment
 caseStudy: true
@@ -68,9 +68,11 @@ are the gaps, roughly in the order I would fix them:
 1. **Timeouts on every command.** Each `git` and script call uses `exec.Command` with no deadline. A
    fetch stuck on an auth prompt or a stalled network blocks the loop forever. I'd switch to
    `exec.CommandContext` with a per-step timeout.
-2. **Graceful shutdown.** There is no signal handling, so SIGTERM kills the process, and systemd then
-   stops a deploy that is halfway through. I'd use `signal.NotifyContext` and either let the current
-   deploy finish or cancel it cleanly.
+2. **Graceful shutdown.** There is no signal handling, so SIGTERM kills the process, and a deploy that
+   is halfway through dies with it. Handling it takes two halves. In Go, `signal.NotifyContext` lets the
+   daemon hear SIGTERM and either finish or cancel the current deploy cleanly. In the unit,
+   `KillMode=mixed` with a `TimeoutStopSec` lets systemd signal only the daemon first, instead of every
+   process in its group (git and the script included), and gives the deploy time to wrap up.
 3. **Retry failed deploys.** The pull moves the branch *before* the script runs. If the script fails,
    the next tick sees matching hashes and never tries again. I'd record the last successfully deployed
    commit and treat "deployed ≠ HEAD" as work still to do.
