@@ -13,7 +13,6 @@ export const roles: Role[] = [
       'Built StockControl, an inventory application in the suite, from scratch — a React/Next.js + TypeScript frontend on a .NET REST backend — covering stock counting (inventory management), supplier delivery intake, and inter-store replenishment. Owned it end to end from an empty repository to production.',
       "Built StockControl's delivery-note scanning with Tesseract OCR, which extracts the data off supplier delivery notes automatically so staff no longer key receipts in by hand.",
       'Delivered 50+ features across backend services and web clients and cut page-load times ~60%; led authentication and authorization with OpenID Connect and OpenIddict.',
-      'Diagnosed a report timeout as an O(n²) loop in C# (not SQL) via SQL Server DMV analysis, then rewrote the query path: a report that never finished in 20 min now runs in ~15 s, with related queries up to ~10× faster.',
       'Resolved ~15 production incidents via logging and monitoring, and built a shared configuration system that cut configuration issues 5×.',
       'Work async with an overseas product team, delivering into a live product owned in another timezone.',
     ],

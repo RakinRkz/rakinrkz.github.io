@@ -35,9 +35,10 @@ const path = Astro.url.pathname;
   }
   .bar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.5rem 1rem;
     padding-block: 14px;
   }
   .name {
@@ -49,6 +50,7 @@ const path = Astro.url.pathname;
     display: flex;
     align-items: center;
     gap: 1.1rem;
+    margin-left: auto;
   }
   ul {
     display: flex;
