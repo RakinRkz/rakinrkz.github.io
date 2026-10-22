@@ -9,6 +9,14 @@ export const projectSchema = z
     private: z.boolean().default(false),
     caseStudy: z.boolean().default(false),
     order: z.number().int(),
+    /** The "at a glance" strip at the top of a case study. */
+    glance: z
+      .object({
+        role: z.string(),
+        since: z.string(),
+        runsOn: z.string(),
+      })
+      .optional(),
   })
   .refine((p) => !(p.private && p.repo), {
     message: 'A private project must not link a repository',

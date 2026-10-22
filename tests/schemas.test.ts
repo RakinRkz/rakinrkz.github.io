@@ -34,3 +34,16 @@ describe('blogSchema', () => {
     expect(blogSchema.safeParse({ title: 't', pubDate: '2026-10-21' }).success).toBe(false);
   });
 });
+
+describe('projectSchema glance', () => {
+  const glance = { role: 'Solo, end to end', since: 'Dec 2025', runsOn: 'Windows installer' };
+  it('accepts an at-a-glance block', () => {
+    expect(projectSchema.parse({ ...base, glance }).glance).toEqual(glance);
+  });
+  it('leaves glance undefined when absent', () => {
+    expect(projectSchema.parse(base).glance).toBeUndefined();
+  });
+  it('rejects a glance block missing a field', () => {
+    expect(projectSchema.safeParse({ ...base, glance: { role: 'Solo', since: 'Dec 2025' } }).success).toBe(false);
+  });
+});

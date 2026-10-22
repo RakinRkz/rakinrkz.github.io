@@ -10,3 +10,12 @@ export function requireCaseStudyBodies<T extends { id: string; body?: string; da
   }
   return caseStudies;
 }
+
+/** Fails the build when showcase data is keyed by an id that matches no project file. */
+export function assertKnownProjectIds(ids: readonly string[], known: readonly string[]): void {
+  for (const id of ids) {
+    if (!known.includes(id)) {
+      throw new Error(`Unknown project id '${id}' in showcase data`);
+    }
+  }
+}
