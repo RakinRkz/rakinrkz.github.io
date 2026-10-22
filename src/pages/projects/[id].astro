@@ -28,7 +28,15 @@ const { Content } = await render(entry);
 >
   <Content />
   <p class="source">
-    {repo ? <a href={repo}>Source on GitHub ↗</a> : isPrivate && <span class="muted">Private repository</span>}
+    {
+      repo ? (
+        <a href={repo}>
+          Source on GitHub <span aria-hidden="true">↗</span>
+        </a>
+      ) : (
+        isPrivate && <span class="muted">Private repository</span>
+      )
+    }
   </p>
 </ProseLayout>
 

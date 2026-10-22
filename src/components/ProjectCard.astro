@@ -3,23 +3,26 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  /** 2 on a page whose next heading up is the h1; 3 under a section's h2. */
+  headingLevel?: 2 | 3;
 }
 
-const { project } = Astro.props;
+const { project, headingLevel = 3 } = Astro.props;
 const { title, summary, stack, repo, private: isPrivate, caseStudy } = project.data;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <article class="card">
-  <h3 class="card-title">
+  <Heading class="card-title">
     {caseStudy ? <a href={`/projects/${project.id}/`}>{title} <span aria-hidden="true">→</span></a> : title}
-  </h3>
+  </Heading>
   <p class="summary">{summary}</p>
   <ul class="tags" aria-label="Tech stack">
     {stack.map((item) => <li class="tag">{item}</li>)}
   </ul>
   {
     repo ? (
-      <a class="repo" href={repo}>
+      <a class="repo" href={repo} aria-label={`${title} on GitHub`}>
         GitHub <span aria-hidden="true">↗</span>
       </a>
     ) : (

@@ -204,6 +204,7 @@ svg {
   border: 1px solid var(--rule);
   border-radius: 8px;
   overflow-x: auto;
+  tab-size: 4;
 }
 
 .prose blockquote {

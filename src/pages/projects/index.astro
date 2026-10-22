@@ -2,18 +2,19 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import { profile } from '../../data/profile';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <BaseLayout
-  title="Projects · Rakinuzzaman"
-  description="Personal and open-source projects by A. K. M. Rakinuzzaman, with case studies of the main ones."
+  title={`Projects · ${profile.shortName}`}
+  description={`Selected projects by ${profile.name}, with case studies of the main ones.`}
 >
   <h1>Projects</h1>
   <p class="intro muted">Selected projects. The ones with an arrow have a full case study.</p>
   <div class="grid">
-    {projects.map((project) => <ProjectCard project={project} />)}
+    {projects.map((project) => <ProjectCard project={project} headingLevel={2} />)}
   </div>
 </BaseLayout>
 

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { profile } from '../data/profile';
 
 interface Props {
   title: string;
@@ -12,7 +13,7 @@ interface Props {
 const { title, description, meta, backHref, backLabel } = Astro.props;
 ---
 
-<BaseLayout title={`${title} · Rakinuzzaman`} description={description}>
+<BaseLayout title={`${title} · ${profile.shortName}`} description={description} type="article">
   <article>
     <a class="back" href={backHref}><span aria-hidden="true">←</span> {backLabel}</a>
     <header>
