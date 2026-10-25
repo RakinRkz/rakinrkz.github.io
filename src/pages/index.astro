@@ -21,7 +21,7 @@ const latestPosts = publishedPosts(await getCollection('blog'), { includeDrafts:
 
 <BaseLayout title={`${profile.name} — Software Engineer`} description={profile.headline}>
   <section class="hero">
-    <p class="who mono muted">{`${profile.name} · Software engineer · ${profile.location}, ${profile.availability}`}</p>
+    <p class="who mono muted">{`${profile.name} · Software engineer`}</p>
     <h1>{hero.statement} <em>{hero.emphasis}</em>.</h1>
     <p class="intro">{hero.intro}</p>
     <ul class="ctas">
